@@ -15,6 +15,8 @@ const zeroPaddedNumber = (num) => {
   return sprintf('%05d', num);
 };
 
+
+//reads the counter file and returns the count (unique todo id)
 const readCounter = (callback) => {
   fs.readFile(exports.counterFile, (err, fileData) => {
     if (err) {
@@ -25,6 +27,7 @@ const readCounter = (callback) => {
   });
 };
 
+// writes the count (unique todo id) to a file called counter.txt
 const writeCounter = (count, callback) => {
   var counterString = zeroPaddedNumber(count);
   fs.writeFile(exports.counterFile, counterString, (err) => {
@@ -37,9 +40,38 @@ const writeCounter = (count, callback) => {
 };
 
 // Public API - Fix this function //////////////////////////////////////////////
-
 exports.getNextUniqueId = () => {
+  if (fs.existsSync(exports.counterFile)) {
+    // if counter.txt exists read it to get current unique ID
+    readCounter((undefined, data) => {
+      console.log('readCounter invoked! data: ', data);
+      var counter = data + 1;
+
+      writeCounter(counter, (undefined, data) => {
+        console.log('call to writeCounter: ', data);
+        console.log('writecounter: ', counter);
+      });
+    });
+    // readCounter((arg, data) => {
+    //   // assign current count to counter
+    //   //counter = data;
+    //   //console.log(data);
+    //   console.log('counter.txt exists! retrieved data: ', data)
+  } else {
+    var counter = 0;
+
+    writeCounter(counter, (arg, data) => {
+      console.log('call to writeCounter: ', data);
+      console.log('writecounter: ', counter);
+    });
+  }
+
+  // (condition) ? (if yes) : (if no)
+  // incriment current counterN
+  // counter = (fs.existsSyn) ? readCounter(data) : 0
+  // console.log('counter: ', zeroPaddedNumber(counter));
   counter = counter + 1;
+
   return zeroPaddedNumber(counter);
 };
 

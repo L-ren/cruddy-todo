@@ -10,10 +10,10 @@ const morgan = require('morgan');
 const path = require('path');
 
 const app = express();
-app.use(morgan('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, './public')));
+app.use(morgan('dev')); // request logger middleware
+app.use(express.json()); // parses JSON payloads of incoming requests
+app.use(express.urlencoded({ extended: true })); // parses URL-encoded payloads of incoming requests
+app.use(express.static(path.join(__dirname, './public'))); // serves static files e.g. images
 
 // RESTful Routes for CRUD operations //////////////////////////////////////////
 
