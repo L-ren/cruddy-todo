@@ -31,32 +31,66 @@ exports.readAll = (callback) => {
 };
 
 exports.readOne = (id, callback) => {
-  var text = items[id];
-  if (!text) {
+  var file = path.join(exports.dataDir, id);
+  console.log('read: ', file);
+  // if file does no exist
+  if (!fs.existsSync(file)) {
+    // throw error
     callback(new Error(`No item with id: ${id}`));
+
+  // else file exists
   } else {
-    callback(null, { id, text });
+
+    // read the file
+    fs.readFile(file, (err, fileData) => {
+      // if file contains nothing, error
+      if (err) {
+        callback(null, { id, fileData });
+      }
+      // else return data (maybe)
+      else {
+        callback(null, { id, fileData });
+        return fileData;
+      }
+    });
   }
 };
 
 exports.update = (id, text, callback) => {
-  var item = items[id];
-  if (!item) {
+  // var item =  // read the item from
+  //console.log('update function calls read one function');
+  //exports.readOne(id, callback);
+
+  var file = path.join(exports.dataDir, id);
+
+  if (!fs.existsSync(file)) {
     callback(new Error(`No item with id: ${id}`));
   } else {
-    items[id] = text;
-    callback(null, { id, text });
+    fs.writeFile(file, text, (err) => {
+      if (err) {
+        throw ('error writing counter');
+      } else {
+        callback(null, { id, text });
+      }
+    });
   }
 };
 
 exports.delete = (id, callback) => {
-  var item = items[id];
-  delete items[id];
-  if (!item) {
+  console.log('deleted: ', id);
+
+  var file =  path.join(exports.dataDir, id);
+
+  // var item = items[id];
+  // delete items[id];
+  if (!fs.existsSync(file)) {
     // report an error if item not found
     callback(new Error(`No item with id: ${id}`));
   } else {
-    callback();
+
+    // delete operation
+    fs.unlink(file, callback)
+
   }
 };
 

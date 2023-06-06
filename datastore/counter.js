@@ -22,7 +22,7 @@ const readCounter = (callback) => {
     if (err) {
       callback(null, 0);
     } else {
-      callback(null, Number(fileData));
+      callback(null, Number(fileData)); // '00010'
     }
   });
 };
@@ -43,35 +43,16 @@ const writeCounter = (count, callback) => {
 exports.getNextUniqueId = () => {
   if (fs.existsSync(exports.counterFile)) {
     // if counter.txt exists read it to get current unique ID
-    readCounter((undefined, data) => {
-      console.log('readCounter invoked! data: ', data);
-      var counter = data + 1;
-
-      writeCounter(counter, (undefined, data) => {
-        console.log('call to writeCounter: ', data);
-        console.log('writecounter: ', counter);
+    readCounter((err, data) => {
+      counter = data + 1;
+      writeCounter(counter, (err, data) => {
       });
     });
-    // readCounter((arg, data) => {
-    //   // assign current count to counter
-    //   //counter = data;
-    //   //console.log(data);
-    //   console.log('counter.txt exists! retrieved data: ', data)
   } else {
-    // var counter = 0;
-
     writeCounter(counter, (arg, data) => {
-      console.log('call to writeCounter: ', data);
-      console.log('writecounter: ', counter);
     });
   }
-
-  // (condition) ? (if yes) : (if no)
-  // incriment current counterN
-  // counter = (fs.existsSyn) ? readCounter(data) : 0
-  // console.log('counter: ', zeroPaddedNumber(counter));
-  counter = counter + 1;
-
+  // counter = counter * 1;
   return zeroPaddedNumber(counter);
 };
 
