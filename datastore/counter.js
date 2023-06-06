@@ -58,7 +58,7 @@ exports.getNextUniqueId = () => {
     //   //console.log(data);
     //   console.log('counter.txt exists! retrieved data: ', data)
   } else {
-    var counter = 0;
+    // var counter = 0;
 
     writeCounter(counter, (arg, data) => {
       console.log('call to writeCounter: ', data);

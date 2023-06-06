@@ -3,16 +3,26 @@ const path = require('path');
 const _ = require('underscore');
 const counter = require('./counter');
 
+// Change to save items to file instead of to local object.
 var items = {};
 
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
+//refactor this to write to file instead of local object
 exports.create = (text, callback) => {
   var id = counter.getNextUniqueId();
-  items[id] = text;
-  callback(null, { id, text });
+
+  var file = path.join(exports.dataDir, id);
+  fs.writeFile(file, text, (err) => {
+    if (err) {
+      throw ('error writing counter');
+    } else {
+      callback(null, { id, text });
+    }
+  });
 };
 
+// iterate over all files and return their names
 exports.readAll = (callback) => {
   var data = _.map(items, (text, id) => {
     return { id, text };
